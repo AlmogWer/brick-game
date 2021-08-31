@@ -5,6 +5,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 let score = 0;
+let highScore = 0;
 
 const brickRowCount = 9;
 const brickColumnCount = 5;
@@ -138,12 +139,32 @@ function moveBall() {
         ) {
           ball.dy *= -1;
           brick.visible = false;
+          increaseScore();
         }
       }
     });
   });
+
+  //Hit bottom wall - lose
+  if (ball.y + ball.size > canvas.height) {
+    showAllBricks();
+    score = 0;
+  }
 }
 
+//Increase score
+function increaseScore() {
+  score++;
+  if (score % (brickRowCount * brickRowCount) === 0) {
+    showAllBricks();
+  }
+}
+//Make all bricks appear
+function showAllBricks() {
+  bricks.forEach((column) => {
+    column.forEach((brick) => (brick.visible = true));
+  });
+}
 //Draw everything
 function draw() {
   //Clear canvas
